@@ -17,6 +17,8 @@ void make_fn(void)
     OCR1AL = ((int)(Tn / (64 * Tosc))) % 256;
 }
 
+void my_init(void);
+
 void main(void)
 {
 
