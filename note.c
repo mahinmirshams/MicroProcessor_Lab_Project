@@ -8,6 +8,15 @@ unsigned int fn_data[24] = {440, 466, 494, 523, 554, 587, 622, 659, 698, 740,
                             1319, 1397, 1480, 1568, 1661};
 
 
+float Tn;
+
+void make_fn(void)
+{
+    TCCR1B |= 0x0B;
+    OCR1AH = ((int)(Tn / (64 * Tosc))) / 256;
+    OCR1AL = ((int)(Tn / (64 * Tosc))) % 256;
+}
+
 void main(void)
 {
 
