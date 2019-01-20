@@ -7,7 +7,7 @@ unsigned int fn_data[24] = {440, 466, 494, 523, 554, 587, 622, 659, 698, 740,
                             784, 831, 880, 932, 988, 1047, 1109, 1175, 1245,
                             1319, 1397, 1480, 1568, 1661};
 
-
+float Tosc = 1.25e-7;
 float Tn;
 
 void make_fn(void)
@@ -16,6 +16,8 @@ void make_fn(void)
     OCR1AH = ((int)(Tn / (64 * Tosc))) / 256;
     OCR1AL = ((int)(Tn / (64 * Tosc))) % 256;
 }
+
+void my_init(void);
 
 void main(void)
 {
