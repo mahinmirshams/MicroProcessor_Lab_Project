@@ -35,9 +35,10 @@ int main(void)
     {
         // if (!(PIND & (1 << PD3)))
         // {
-            // freq += 0x000F;
-            // OCR1A = freq;
-            // _delay_ms(20);
-            PORTC = PINA;
-        }/
+        // freq += 0x000F;
+        // OCR1A = freq;
+        // _delay_ms(20);
+        PORTC = PINA;
     }
+    /
+}
