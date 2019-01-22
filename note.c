@@ -1,33 +1,23 @@
 #include <stdio.h>
+#include <avr/io.h>
+#include <avr/interrupt.h>
 
-char digits[16] = {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D,
-                   0x7D, 0x07, 0x7F, 0x6F, 0x77, 0x7C, 0x39, 0x5E, 0x79, 0x71};
+#ifdef XTAL
+#undef XTAL
+#endif
+#define XTAL 16000000UL
+#define F_CPU XTAL
 
-unsigned int fn_data[24] = {440, 466, 494, 523, 554, 587, 622, 659, 698, 740,
-                            784, 831, 880, 932, 988, 1047, 1109, 1175, 1245,
-                            1319, 1397, 1480, 1568, 1661};
+#include <util/delay.h>
 
+volatile uint16_t freq;
 
-float Tn;
-
-void make_fn(void)
+int main(void)
 {
-    TCCR1B |= 0x0B;
-    OCR1AH = ((int)(Tn / (64 * Tosc))) / 256;
-    OCR1AL = ((int)(Tn / (64 * Tosc))) % 256;
-}
+    DDRC |= (1 << PC0) | (1 << PC1) | (1 << PC2) | (1 << PC3);
+    DDRD |= (1 << PD5) | (1 << PD6);
+    DDRD &= ~(1 << PD3);
 
-void my_init(void);
-
-void main(void)
-{
-
-}
-
-void my_init(void)
-{
-    DDRA = (0 << DDA7) | (0 << DDA6) | (0 << DDA5) | (0 << DDA4) | (0 << DDA3) | (0 << DDA2) | (0 << DDA1) | (0 << DDA0);
-    
-    PORTA = (0 << PORTA7) | (0 << PORTA6) | (0 << PORTA5) | (0 << PORTA4) | (0 << PORTA3) | (0 << PORTA2) | (0 << PORTA1) | (0 << PORTA0);
-
+    PORTC |= (1 << PC0);
+    PORTD |= (1 << PD3);
 }
