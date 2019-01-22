@@ -20,4 +20,19 @@ int main(void)
 
     PORTC |= (1 << PC0);
     PORTD |= (1 << PD3);
-}
+
+    TCCR1B |= (1 << WGM12) | (1 << CS10);
+    TCCR1A |= (1 << COM1A0);
+
+    freq = 0x000F;
+    OCR1A = freq;
+
+    while (1)
+    {
+        if (!(PIND & (1 << PD3)))
+        {
+            freq += 0x000F;
+            OCR1A = freq;
+            _delay_ms(20);
+        }
+    }
