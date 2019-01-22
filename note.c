@@ -14,25 +14,30 @@ volatile uint16_t freq;
 
 int main(void)
 {
-    DDRC |= (1 << PC0) | (1 << PC1) | (1 << PC2) | (1 << PC3);
-    DDRD |= (1 << PD5) | (1 << PD6);
-    DDRD &= ~(1 << PD3);
+    // DDRC |= (1 << PC0) | (1 << PC1) | (1 << PC2) | (1 << PC3);
+    // DDRD |= (1 << PD5) | (1 << PD6);
+    // DDRD &= ~(1 << PD3);
 
-    PORTC |= (1 << PC0);
-    PORTD |= (1 << PD3);
+    // PORTC |= (1 << PC0);
+    // PORTD |= (1 << PD3);
 
-    TCCR1B |= (1 << WGM12) | (1 << CS10);
-    TCCR1A |= (1 << COM1A0);
+    // TCCR1B |= (1 << WGM12) | (1 << CS10);
+    // TCCR1A |= (1 << COM1A0);
 
-    freq = 0x000F;
-    OCR1A = freq;
+    // freq = 0x000F;
+    // OCR1A = freq;
+
+    DDRC = 0xff; // Configure PORTC as output to connect Buzzer
+    DDRA = 0x00; // Configure PORTA as Input to read the switchs
+    PORTA = 0xff;
 
     while (1)
     {
-        if (!(PIND & (1 << PD3)))
-        {
-            freq += 0x000F;
-            OCR1A = freq;
-            _delay_ms(20);
-        }
+        // if (!(PIND & (1 << PD3)))
+        // {
+            // freq += 0x000F;
+            // OCR1A = freq;
+            // _delay_ms(20);
+            PORTC = PINA;
+        }/
     }
