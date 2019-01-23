@@ -23,6 +23,14 @@ Data Stack size         : 512
 
 // Declare your global variables here
 
+void lcd_cmd  (unsigned char);
+void lcd_data (unsigned char);
+void lcd_initialize (void);
+void lcd_display (void);
+void LCD4_Convert(unsigned char);
+
+
+
 char digits[16]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,
                  0x7D,0x07,0x7F,0x6F,0x77,0x7C,0x39,0x5E,0x79,0x71};
 
@@ -39,6 +47,87 @@ unsigned int Fn;
 
 float Tosc =  1.25e-7;
 float Tn;
+
+
+void lcd_cmd(unsigned char data)
+{
+	
+	IOCLR0	|= RS;			
+	IOCLR0	|= RW;			
+	LCD4_Convert(data);
+}
+
+void lcd_initialize(void)
+{
+	int i;
+	for(i=0;i<4;i++)
+	{
+		IOCLR0 = 0xF << 19;			
+		lcd_cmd(cmd[i]);
+		delay_ms(15); 
+	}
+}
+
+
+void lcd_data (unsigned char data)
+{
+	
+	IOSET0	|= RS;			//0x1000;		//RS
+	IOCLR0	|= RW;			//0x2000;		//RW
+	LCD4_Convert(data);
+}
+void lcd_display (char msg[])
+{
+	char i;
+
+	/* first line message */
+	lcd_cmd(0x80);
+	delay_ms(15); 
+	i=0;
+	while(msg[i]!='\0')
+	{
+		delay_ms(5);
+		lcd_data(msg[i]);
+		i++;
+	}
+	delay_ms(15); 
+
+	/* second line message */
+
+	lcd_cmd(0xc0);
+	delay_ms(15); 
+	i=0;
+	while(msg1[i]!='\0')
+	{
+		delay_ms(5);
+		lcd_data(msg1[i]);
+		i++;
+	}
+	delay_ms(15); 
+}
+
+void LCD4_Convert(unsigned char c)
+{
+
+	if(c & 0x80) IOSET0 = 1 << 22; else IOCLR0 = 1 << 22;
+	if(c & 0x40) IOSET0 = 1 << 21; else IOCLR0 = 1 << 21;
+	if(c & 0x20) IOSET0 = 1 << 20; else IOCLR0 = 1 << 20;
+	if(c & 0x10) IOSET0 = 1 << 19; else IOCLR0 = 1 << 19;
+
+	IOSET0	= EN;										
+	delay_ms(15); 
+	IOCLR0	= EN;										
+
+	if(c & 0x08) IOSET0 = 1 << 22; else IOCLR0 = 1 << 22;
+	if(c & 0x04) IOSET0 = 1 << 21; else IOCLR0 = 1 << 21;
+	if(c & 0x02) IOSET0 = 1 << 20; else IOCLR0 = 1 << 20;
+	if(c & 0x01) IOSET0 = 1 << 19; else IOCLR0 = 1 << 19;
+
+	IOSET0	= EN;										
+	delay_ms(15); 
+	IOCLR0	= EN;											//0x4000;		//EN
+}
+
 
 
 // Standard Input/Output functions
@@ -83,7 +172,8 @@ while (1)
                 
                 for(i=0 ; i < D ; i++)
                     delay_ms(50); 
-                PORTD.1 = !PIND.1;]
+                PORTD.1 = !PIND.1;
+                lcd_display(fn_data[N]);
             
     }
 }
