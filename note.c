@@ -2,17 +2,14 @@
 This program was created by the
 CodeWizardAVR V3.12 Advanced
 Automatic Program Generator
-© Copyright 1998-2014 Pavel Haiduc, HP InfoTech s.r.l.
+Â© Copyright 1998-2014 Pavel Haiduc, HP InfoTech s.r.l.
 http://www.hpinfotech.com
-
 Project : 
 Version : 
 Date    : 1/22/2019
 Author  : 
 Company : 
 Comments: 
-
-
 Chip type               : ATmega32A
 Program type            : Application
 AVR Core Clock frequency: 8.000000 MHz
@@ -27,15 +24,12 @@ Data Stack size         : 512
 // Declare your global variables here
 
 
-char digits[16]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,
-                 0x7D,0x07,0x7F,0x6F,0x77,0x7C,0x39,0x5E,0x79,0x71};
-
 unsigned int fn_data[24]={440,466,494,523,554,587,622,659,698,740,
                         784,831,880,932,988,1047,1109,1175,1245,
                         1319,1397,1480,1568,1661};
                  
 
-unsigned char N, D;
+unsigned int N, D;
 
 unsigned char i;
 unsigned int Fn;
@@ -64,35 +58,31 @@ void main(void)
 my_init();
 
 
-//PORTD.6 = 0; // turn off right 7-seg
-//PORTD.7 = 1; // turn on left 7-seg  and show 'A'
-PORTC = digits[10];
+//PORTC = digits[10];
 
+N = 19; 
 while (1)
-    {       
-        PORTD.1 = 1;
+    {          
+        N = (N+1)%20;
         TCCR1B &= 0xF8; // Timer/Counter Stopped
         
         //if(getchar()=='S')
             //{   
                 // putchar('S');
                 
-                N = '2';
                 //putchar('N');
                 Fn = fn_data[N];
                 Tn =(float)(1.0 / Fn);
                 
-                D = '5';
+                D = 10;
                 //putchar('D');     
                 make_fn();   // Set prescaler and Output compare register A(OCR1A)
-                              
                 
                 TCNT1=0;
+                
                 for(i=0 ; i < D ; i++)
-                    delay_ms(50);
-                    
-                // getting output from PORTD.5
-                // 
+                    delay_ms(50); 
+                PORTD.1 = !PIND.1;
             //}
             
     }
@@ -123,7 +113,7 @@ PORTC=(0<<PORTC7) | (0<<PORTC6) | (0<<PORTC5) | (0<<PORTC4) | (0<<PORTC3) | (0<<
 // Function: Bit7=Out Bit6=Out Bit5=Out Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In 
 DDRD=(1<<DDD7) | (1<<DDD6) | (1<<DDD5) | (1<<DDD4) | (1<<DDD3) | (1<<DDD2) | (1<<DDD1) | (1<<DDD0);
 // State: Bit7=1 Bit6=1 Bit5=0 Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T 
-PORTD=(1<<PORTD7) | (1<<PORTD6) | (1<<PORTD5) | (0<<PORTD4) | (0<<PORTD3) | (0<<PORTD2) | (0<<PORTD1) | (0<<PORTD0);
+PORTD=(1<<PORTD7) | (1<<PORTD6) | (0<<PORTD5) | (0<<PORTD4) | (0<<PORTD3) | (0<<PORTD2) | (1<<PORTD1) | (0<<PORTD0);
 
 // Timer/Counter 0 initialization
 // Clock source: System Clock
