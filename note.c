@@ -71,11 +71,7 @@ while (1)
         N = (N+1)%20;
         TCCR1B &= 0xF8; // Timer/Counter Stopped
         
-        //if(getchar()=='S')
-            //{   
-                // putchar('S');
-                
-                //putchar('N');
+        
                 Fn = fn_data[N];
                 Tn =(float)(1.0 / Fn);
                 
@@ -87,8 +83,7 @@ while (1)
                 
                 for(i=0 ; i < D ; i++)
                     delay_ms(50); 
-                PORTD.1 = !PIND.1;
-            //}
+                PORTD.1 = !PIND.1;]
             
     }
 }
